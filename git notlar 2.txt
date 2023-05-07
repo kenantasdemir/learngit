@@ -1,0 +1,38 @@
+ ##################################### SSH olmadan commit etme ####################################
+
+git init
+git add .
+git commit -m "sshsız"
+git remote add origin https://github.com/kenantasdemir/ssh_siz.git
+git push -u origin master
+
+
+ ##################################### SSH kullanarak commit etme ####################################
+
+## ssh-keygen -t rsa -b 4096 -C "githubmailadresiniz"
+//yukarıdaki komutu çalıştırdığınızda sizden bir dosya ismi isteyecektir.
+//istediğiniz ismi verebilirsiniz ama Türkçe karakter kullanmamaya dikkat edin.
+//dosya ismi "verdiginizisim.ssh" şeklinde olacaktır.
+## şimdi ise bir parola oluşturmanız gerekiyor. 
+
+eval ssh-agent -s
+ssh-add ~/.ssh/id_rsa
+oluşturulan parolayı gir
+
+github.com da SSH and GPG keys kısmında istediğin title bilgisini gir
+Key kısmına ssh id gir
+
+
+//ssh id öğrenmek için
+cat ~/.ssh/id_rsa.pub
+
+//ssh key çalışıyor mu çalışmıyor mu test etmek için
+ssh -T git@github.com
+
+
+//ssh ile githuba proje gönderme
+git init
+git add .
+git commit -m "sshlı"
+git remote add origin git@github.com:kenantasdemir/ssh_li.git
+git push -u origin master

@@ -1,0 +1,343 @@
+Version Kontrol Sistemi
+Dosyaların ya da bütün projenin geçmişteki belirli bir sürümüne erişmenizi sağlar.
+Birden fazla kulanıcının aynı anda birbirinin değişikliklerini ezmeden bir proje üzerinde
+çalışabilmesini sağlar. 
+Bilgisayarınza erişme imkanı olmasa bile projenize ulaşmanıza yardımcı olur.
+Projeye kimin ne kadar katkı sağladığını görmenize yardımcı olur.
+
+Versiyon Kontrol Çeşitleri
+Dağıtık Git
+Merkezi
+
+Gitin hedefleri
+Hız
+Basit tasarım
+çizgisel olmayan geliştirim için güçlü destek(binlerce paralel dal)
+bütünüyle dağıtık olma
+linux çekirdeği gibi büyük projelerle verimli biçimde başa çıkabilme(hız ve veri boyutu)
+
+Git Çalışma Prensibi
+
+Çalışma klasörünüzde dosyalar üzerinde değişiklik yaparsınız
+dosyaları bellek kopyalarını hazırlık alanına ekleyerek hazırlarsınız
+dosyların hazırlık alanındaki hallerini alıp oradaki bellek kopyasını kalıcı olarak git
+klasörüne depolayan bir kayıt işlemi yaparsınız.
+
+
+git --version
+git config --global user.name "Kenan Tasdemir"
+git config --global user.email "kenant42@hotmail.com"
+git config --global core.editor notepad++
+git config --global -l
+//yapılan konfigrasyonları listeler.
+//git config --list
+
+notepad++.exe ~/.gitconfig
+//.gitconfig dosyasını notepadde açar.
+
+
+git config --global -e
+//Bu komuts, Git yapılandırma dosyasını (genellikle ~/.gitconfig dosyası) düzenlemek için kullanılır.
+
+git merge firstbranch --no-ff
+//Bu komut, "no fast-forward" birleştirme stratejisi kullanarak firstbranch branch'ini mevcut branch'e (HEAD branch) birleştirir.
+
+
+
+git config --global alias.myfirstalias "log --all --graph --decorate --oneline"
+//--all seçeneği ile bütün dallara ait logların listeneceği belirtildi.
+//--graph seçeneği ile dalların çizgisel bir grafik şeklinde görüntülenmesini sağlar.
+//--decorate seçeneği, commit'lerin referanslarının (branch, tag, vs.) görüntülenmesini sağlar. 
+//--oneline seçeneği ise her commit'in özetini tek bir satırda gösterir.
+
+bu aliası kullanmak için:
+git myfirstalias
+
+alias kullanmak istemezseniz seçenekleri komuttan sonra girebilirsiniz.
+git log --oneline --decorate --graph
+
+git config --global mergetool.keepBackup false
+//Bu komut, birleştirme işlemlerindeki yedek dosyaların otomatik olarak silinmesini sağlar.
+
+
+difftool aracı olarak p4merge kullanacağız.
+gerekli konfigurasyonu tamamlamak için aşağıdaki komutu girin.
+git config --global diff.tool p4merge
+git config --global merge.tool p4merge
+
+
+git difftool master firstbranch
+//master ve firstbranch adlı dalların arasındaki farkları bir arayüz yardımıyla görüntüler.
+
+
+git difftool 7e2db8523d24d8e0520c352333db094794b238c7 99f50cf5da0a1126a35579c5cbee3135f53b7692
+//2 commit arasındaki farkı görüntüler.
+
+git mergetool 7e2db8523d24d8e0520c352333db094794b238c7 99f50cf5da0a1126a35579c5cbee3135f53b7692
+//iki branchi birleştirir.
+
+git difftool HEAD
+Working Directory ile en son commit arasındaki farkı görüntüler
+
+Staging Area ile en son commit arasındaki farkı görüntüler.
+//git difftool HEAD
+
+
+
+
+Git Stash
+Yazılım projelerinde, yeni bir özellik üzerinde geliştirme yaparken, aniden, acil olarak bir sorun üzerinde çalışmanız gerekebilir.
+Çalışmanızın ortasına geldiğiniz için, yarısı yapılan değişiklikleri tekrardan yaparak uğraşmak oldukça zorlayıcı olacaktır.
+
+Bu nedenle, yapılan işi geçici olarak kaydetmek, hata üzerinde çalışmak ve geliştirme üzerindeki çalışmaya geri dönmek oldukça işinizi kolaylaştıracaktır.
+ Git stash ise, bu noktada çözüm sağlar.
+
+git stash
+stagin area alınan bir değişikliği stash alanına almak için kullanılır.
+
+git stash save "Değişikliklerim"
+//Burada "Değişikliklerim" yazan kısım, stash'ın açıklamasıdır.
+//Bu kısmı isteğe bağlı olarak kullanabilirsiniz.
+
+git stash apply
+//Bu komut, en son kaydedilen stash'teki değişiklikleri geri yükler.
+
+git stash list
+//geçici olarak kaydedilen değişikliklerin listesine erişilir.
+
+git stash pop 
+//Bu komut, son kaydedilen değişikliklerin geçici alandaki (stash) içeriğini geri yükler ve geçici alanı //temizler.
+
+git stash apply
+stash listesinin üstünde olan kayıtlar branche yüklenir fakat listeden silinmez.
+//Bu komut, son kaydedilen değişiklikleri geri yükler ancak geçici alanı temizlemez. 
+//Bu sayede, yaptığınız geçici değişikliklerinizi kaydedmeden önceki haline geri dönebilirsiniz.
+
+git stash apply stash@{0}
+//Bu komut, en son kaydedilen stash'teki değişiklikleri geri yükler. 
+
+git stash show 
+//Bu komut, son kaydedilen değişiklikleri görüntüler ancak geri yükleme işlemi yapmaz ve kaydı listeden silmez.
+
+git stash drop
+//Bu komut ile de istediğimiz bir kayıdı stash listesinden silebiliriz.
+
+git stash drop stash@{2}
+//Bu komut, geçici alandaki üçüncü kaydedilen değişikliği siler ve listeden kaldırır.
+//indeksler 0 dan başlar. 0 1 2 3 gibi.
+
+
+git bisect --> Hatanın veya kodun bozulmasına neden olan işlem bulunana kadar her yürütmeyi kötü veya iyi olarak kontrol etme imkanı sağlar.
+git config --> git kurulumdan sonra yapılandırma ayarları için kullanılır.
+git init --> bilgisayarımızda yerel bir depo oluşturmak için kullanılır.
+git add --> bütün/bazı dosyaları yerel depoya eklemek için kullanılır.
+git commit --> yerel depoya eklediğimiz dosyaları yorumla birlikte eklemek için
+git remote --> uzaktaki repoya göndereceğimiz adresi belirmek için kullanılır.
+git push --> uzaktaki depoya proje dosylarımızı göndermemize yarar.
+
+git commit -m "githuba proje gönderiyorum"
+
+git commit -a -m "myfirstcommit"
+git push
+
+git commit --amend -m "yeni değişiklik."
+//"git commit --amend" komutu, son commit'inizin yerine yeni bir commit oluşturur.
+
+
+git diff
+WD(Working Directory) ile SA(Staging Area) arasındaki farkı görüntüler.
+
+
+//Bir proje içinde birden fazla görev var ise  ya da bir proje için birden fazla kişinin çalışması gerekiyorsa 
+dallanma ve birleşme komutlarının kullanılması gerekir.
+git branch --> branch/dal oluşturmak için kullanılır.
+git branch user-backend
+//user-backend isimli branch oluşturuldu.
+
+git checkout -b yenibranchadi
+//yenibranchadi isimli bir branch oluşturuldu
+
+git add README.md
+git commit -m "firstcommit"
+git push --set-upstream origin yenibranchadi
+git checkout main
+git pull
+git merge yenibranchadi
+git push
+
+git checkout --> oluşturulan dala geçmek için kullanılır.
+git checkout user-backend
+//user-backend isimli dala geçildi.
+
+git merge --> oluşan dalları birleştirmek için kullanılır.
+git merge master user_backend
+//master ve user-backend isimli dallar birleştirildi.
+
+git checkout yenibranchadi
+git add fileName
+git commit -m "yeni dosya"
+git push
+
+git checkout main
+git cherry-pick 7e2db8523d24d8e0520c352333db094794b238c7 99f50cf5da0a1126a35579c5cbee3135f53b7692
+//bu komut ile main dala istediğimiz iki commiti ekledik.
+git push
+
+git checkout yenibranchadi
+git commit -a -m "yeni commit"
+git reset --hard HEAD~1
+//son yapılan 1 commiti geri alır.
+//--hard seçeneği ile dosya içeriğini de siler.
+
+
+git tag --> etiketle sürüm numarası oluşturmak için kullanılır.
+git tag v1.0.0
+//Bu komut, mevcut HEAD commit'i için "v1.0.0" etiketini oluşturacaktır. 
+//"v1.0.0" etiketi, belirtilen commit'e referans olarak kullanılabilir ve 
+//sürüm tarihçesi veya sürüm notları gibi diğer bilgilerle birlikte kaydedilebilir.
+
+git tag -a v1.0.0 -f -m "Güncellenmiş açıklama"
+//Bu komut, "v1.0.0" etiketinin açıklamasını 
+//"Güncellenmiş açıklama" ile değiştirecektir. 
+//"-f" parametresi, var olan bir etiketi zorla değiştirmenizi sağlar
+
+
+git rebase --> başka bir dalın değişikliklerini kendi dalınıza dahil etmek istediğinizde kullanışlıdır.
+//rebase işlemi yapmak için oluşturduğumuz branche gitmeliyiz
+
+git rebase --abort
+//Bu komut bir rebase işlemi sırasında meydana gelen bir hata veya çakışma durumunda rebase işlemini iptal etmek için kullanılır.
+
+git rebase --continue
+//Bu komut bir rebase işlemi sırasında meydana gelen çakışma durumlarını çözdükten sonra rebase işlemini devam ettirmek için kullanılır.
+
+git rebase --skip
+//Bu komutu, bir çakışma durumu meydana gelirse ve çakışmayı çözmek yerine o commit'in atlanmasını tercih ederserseniz kullanabilirsiniz.
+
+git checkout main
+git pull
+git rebase yenibranchadi
+git push
+
+git clone --> Uzak depodaki projeyi bilgisayarımıza kopyalamak için kullanılır.
+git clone https://github.com/kenantasdemir/learngit.git
+
+
+git status --> çalışılan projede değişklik varsa değişiklikleri gösterir.
+git diff --> Dalları birleştirmeden önce nerelerde değişiklik yapıldığını gösterir.
+
+git diff komutu iki branch arasındaki değişiklikleri gösterir.
+
+git diff 7e2db8523d24d8e0520c352333db094794b238c7 99f50cf5da0a1126a35579c5cbee3135f53b7692
+//hash değerleri belirtilen 2 commit arasındaki farkları görüntüler.
+
+git log --> oluşan bütün commitler hakkında detaylı bilgileri listelemek için kullanılır.
+
+git log --oneline
+//yapılan commitleri tek satırda listeler.
+
+git blame newfile.txt
+//Bu komut, "myfile.txt" dosyasındaki her satır için, 
+//o satırı en son değiştiren kişinin adını, e-posta adresini, 
+//değişiklik tarihini ve ilgili commit bilgilerini gösteren bir çıktı verecektir. 
+//Bu çıktıda, satırların solunda bulunan sayılar, ilgili commit numaralarını gösterir.
+
+
+
+git revert --> commit ettiğimiz herhangi bir değişikliği geri almak için kullanılır.
+git revert 7e2db8523d24d8e0520c352333db094794b238c7
+//belirtilen hash değerine sahip commiti geri almak için kullanılır.
+
+git reset --> git revert komutuna benzerdir. fakat burada yapılan commit silinir..
+
+git rm --> oluşturduğumuz git deposundaki dosyanın silinmesine yarar.
+git rm README.md
+//README.md isimli dosyayı siler.
+
+git show --> oluşturduğumuz nesneler hakkında bilgi verir.
+git pull --> uzak depodaki yapılan değişikliği bilgisayarımıza almak için kullanabilirsiniz.
+
+
+git rm -r myfolder
+//myfolder adlı klasör içindeki dosyaları siler.
+
+git branch --d branchAdi
+//branchAdi adlı dal silindi.
+
+git checkout --b yeniBranch
+//yeni bir branch oluşturuldu ve bu branche geçildi.
+
+git branch -v
+//localdeki bütün branchleri listeler.
+
+
+git branch test
+//test adlı yeni bir branch oluşturuldu.
+
+git merge test
+//üzerinde çalışılan branch ile test adlı dalı birleştirir.
+
+
+git branch -d user_backend
+//user_backend isimli dalı silmek için kullanılır.
+
+git branch -m user new_user
+//user isimli branchı new_user ismiyle değiştir.
+
+git branch
+//hangi dalda işlem yapıldığını görmek için bu komut kullanılabilir.
+
+git branch --a ya da
+git branch --all
+//tüm branchleri listeler
+
+git push origin user_backend
+//Bu komut, "user_backend" branch'inizdeki tüm değişiklikleri 
+//"origin" adlı uzak depodaki "user_backend" branch'ine yükler. 
+//Bu sayede, uzak depodaki branch'iniz değişikliklerinizle güncellenir.
+
+
+################################################################################################################
+
+git remote
+//Bu komut mevcut olan tüm remote deposunu listeler.
+
+git remote -v
+// Bu komut mevcut olan tüm remote depoların kısaltılmış adlarını ve ilgili URL'leri listeler. 
+//Bu komut ayrıca, her bir remote depo için ileri veya geri bağlantıların (fetch ve push bağlantıları) durumunu da gösterir.
+
+git push origin master
+//Bu komut yerel depodaki "master" branch'ını, "origin" olarak tanımlanan uzak depoya (remote repository) göndermek için kullanılır. 
+
+
+git add index.html
+git commit -m "index.html dosyası title güncellendi"
+git push https://github.com/kullaniciAdi/projeAdi.git master
+
+git remote add origin https://github.com/kullaniciAdi/projeAdi.git
+git remote -v
+git push origin
+
+
+git push origin master
+//Bu komut master adlı yerel dalındaki son değişiklikleri origin adlı uzak sunucuya gönderir.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
