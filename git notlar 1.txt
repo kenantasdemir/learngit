@@ -189,6 +189,9 @@ git reset --hard HEAD~1
 //son yapılan 1 commiti geri alır.
 //--hard seçeneği ile dosya içeriğini de siler.
 
+git checkout g9fha5a
+//id değeri belirtilen commite dönmek için kullanılır.
+
 
 git tag --> etiketle sürüm numarası oluşturmak için kullanılır.
 git tag v1.0.0
@@ -236,6 +239,12 @@ git log --> oluşan bütün commitler hakkında detaylı bilgileri listelemek i�
 git log --oneline
 //yapılan commitleri tek satırda listeler.
 
+git log -p 2
+//yapılan commitlerden en son 2 commiti getirir.
+
+git log --since=30minutes
+//son 30 dk içerisinde yapılan commitleri görüntüler.
+
 git blame newfile.txt
 //Bu komut, "myfile.txt" dosyasındaki her satır için, 
 //o satırı en son değiştiren kişinin adını, e-posta adresini, 
@@ -245,10 +254,11 @@ git blame newfile.txt
 
 
 git revert --> commit ettiğimiz herhangi bir değişikliği geri almak için kullanılır.
-git revert 7e2db8523d24d8e0520c352333db094794b238c7
-//belirtilen hash değerine sahip commiti geri almak için kullanılır.
+git revert 7e2db85
+//belirtilen id değerine sahip commiti geri almak için kullanılır.
 
 git reset --> git revert komutuna benzerdir. fakat burada yapılan commit silinir..
+//yapılan tütm değişiklikler silinir 
 
 git rm --> oluşturduğumuz git deposundaki dosyanın silinmesine yarar.
 git rm README.md
@@ -271,11 +281,18 @@ git branch -v
 //localdeki bütün branchleri listeler.
 
 
+git branch -a 
+//bütün branchleri listeler.
+
+
 git branch test
 //test adlı yeni bir branch oluşturuldu.
 
 git merge test
 //üzerinde çalışılan branch ile test adlı dalı birleştirir.
+
+git merge cssbranch htmlbranch
+//htmlbranch ve cssbranch birleştirildi.
 
 
 git branch -d user_backend
@@ -298,6 +315,28 @@ git push origin user_backend
 
 
 ################################################################################################################
+
+git add -A
+//mevcut dizindeki tüm değişiklikleri staging area adlı bölgeye gönderir.
+git commit -m "something changed"
+
+git add . 
+//mevcut dizindeki tüm değişiklikleri staging area adlı bölgeye gönderir.
+git commit -m "something changed again"
+
+git restore --staged .
+//staging area adlı bölgeye gönderilmiş dosyalar staging areadan çalışma dizinine geri getirilir.
+
+örnek bir senaryomuzda bir dosyada değişiklik yapıldığını ve githuba gönderileceğini farzedelim.
+git add index.html
+dosya staging area adlı bölgeye geçmiş oldu.
+şimdi staging areadan çalışma dizinine tekrar çekmek için
+git restore --staged index.html komutunu kullandık.
+
+son olarak dosyada yaptığımız değişiklikleri geri almak için
+git restore index.html komutunu çalıştırırız.
+
+
 
 git remote
 //Bu komut mevcut olan tüm remote deposunu listeler.
