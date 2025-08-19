@@ -93,7 +93,12 @@ Bu nedenle, yapılan işi geçici olarak kaydetmek, hata üzerinde çalışmak v
  Git stash ise, bu noktada çözüm sağlar.
 
 git stash
-stagin area alınan bir değişikliği stash alanına almak için kullanılır.
+staging area alınan bir değişikliği stash alanına almak için kullanılır.
+
+git stash list
+//tüm stashleri listeler
+
+git stash show stash@{1}
 
 git stash save "Değişikliklerim"
 //Burada "Değişikliklerim" yazan kısım, stash'ın açıklamasıdır.
@@ -113,18 +118,30 @@ stash listesinin üstünde olan kayıtlar branche yüklenir fakat listeden silin
 //Bu komut, son kaydedilen değişiklikleri geri yükler ancak geçici alanı temizlemez. 
 //Bu sayede, yaptığınız geçici değişikliklerinizi kaydedmeden önceki haline geri dönebilirsiniz.
 
+git stash apply 1
+
 git stash apply stash@{0}
 //Bu komut, en son kaydedilen stash'teki değişiklikleri geri yükler. 
+
+git stash push -m "New tax rules"
+//yeni bir stash oluşturur.
 
 git stash show 
 //Bu komut, son kaydedilen değişiklikleri görüntüler ancak geri yükleme işlemi yapmaz ve kaydı listeden silmez.
 
+git stash show 1
+
 git stash drop
 //Bu komut ile de istediğimiz bir kayıdı stash listesinden silebiliriz.
+
+git stash drop 1
 
 git stash drop stash@{2}
 //Bu komut, geçici alandaki üçüncü kaydedilen değişikliği siler ve listeden kaldırır.
 //indeksler 0 dan başlar. 0 1 2 3 gibi.
+
+git stash clear
+
 
 
 git bisect --> Hatanın veya kodun bozulmasına neden olan işlem bulunana kadar her yürütmeyi kötü veya iyi olarak kontrol etme imkanı sağlar.
@@ -172,6 +189,22 @@ git checkout user-backend
 git merge --> oluşan dalları birleştirmek için kullanılır.
 git merge master user_backend
 //master ve user-backend isimli dallar birleştirildi.
+
+git merge bugfix
+//komutu çalıştırıldığında, bugfix branch’indeki tüm commit’ler //ayrı ayrı master (veya içinde bulunduğun branch) içine taşınır.
+//bugfix adlı dalı current dal ile birleştirir.
+//commit geçmişi korunur.
+
+git merge --no-ff bugfix
+
+git merge --abort
+//merge işlemini iptal eder.
+
+git merge --squash bugfix
+//Bu komut, bugfix branch’indeki değişiklikleri alır 
+//ama commit geçmişini taşımaz.
+
+Tüm commit’leri tek bir “squash” (sıkıştırılmış) değişiklik olarak hazırlar.
 
 git checkout yenibranchadi
 git add fileName
@@ -245,6 +278,10 @@ git log -p 2
 git log --since=30minutes
 //son 30 dk içerisinde yapılan commitleri görüntüler.
 
+git log master..bugfix
+
+git diff master..bugfix
+
 git blame newfile.txt
 //Bu komut, "myfile.txt" dosyasındaki her satır için, 
 //o satırı en son değiştiren kişinin adını, e-posta adresini, 
@@ -287,6 +324,15 @@ git branch -a
 
 git branch test
 //test adlı yeni bir branch oluşturuldu.
+
+git checkout test
+
+git switch test
+
+git switch -C bugfix
+//yeni dal oluşturur ve ona geçer
+
+
 
 git merge test
 //üzerinde çalışılan branch ile test adlı dalı birleştirir.
